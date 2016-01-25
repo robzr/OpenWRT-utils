@@ -4,11 +4,11 @@ P(){
 echo -$1 `cat /*/$1/c*e|tr \\\0 \ `
 [ $1 = $$ ]&&return
 L=0
-for k in `egrep "^PPid:   $1$" /*/[0-9]*/s*s | cut -f3 -d/`
+for k in `egrep ^PPid:\	$1$ /*/[0-9]*/s*s|cut -f3 -d/`
 do
 P $L|sed -n '/[0-9]/s/^/ |/p'
 L=$k
 done
 P $L|sed -n '/[0-9]/s/^/ L/p'
 }
-P $1|sed 's/L /  /g'
+P 1|sed 's/L /  /g'
