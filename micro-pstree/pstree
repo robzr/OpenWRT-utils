@@ -1,0 +1,14 @@
+#!/bin/sh
+#robzr/micro-pstree
+view () {
+ [ $1 = 0 ] && return
+ echo "- $1 `tr '\0' \ </proc/$1/cmdline`"
+ [ $1 = $$ ] && return
+ lk=0
+ for kid in `egrep "^PPid:	*$1$" /proc/[0-9]*/s*s 2>/dev/null | cut -f3 -d/ | sort -n`; do 
+  view $lk | sed -n '/[0-9]/s/^/   |/p'
+  lk=$kid
+ done
+ view $lk | sed -n '/[0-9]/s/^/   L/p'
+}
+view ${1:-1} | sed -Ee 's/L   /    /g' -e 's/^[- ] ? ?//'
