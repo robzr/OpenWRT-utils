@@ -18,10 +18,14 @@ uciLoadVar () {
 # uciLoad takes multiple arguments, first is the uci option/list name,
 # followed by default value(s).  Returns to stdout, one list element per line.
 #
+# Optionally takes a -d X delimiter arg
+#
 # ARGs: $1 = option/list name $2+ = default values
 uciLoad() {
-  uci -q -d"
-"  get "$uciSection.$1" 2>/dev/null || while [ -n "$2" ]; do echo $2; shift; done
+  local delim="
+"
+  [ "$1" = -d ] && { delim="$2"; shift; shift; }
+  uci -q -d"$delim" get "$uciSection.$1" 2>/dev/null || while [ -n "$2" ]; do echo $2; shift; done
 }
 
 # Example usage:
